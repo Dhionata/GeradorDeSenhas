@@ -82,8 +82,10 @@ class Gerador {
         "<",
         ">",
         ";",
+        ":",
         "°",
         "ç",
+        "Ç",
         "~",
         "^",
         "{",
@@ -105,18 +107,51 @@ class Gerador {
         return senha
     }
 
-    fun soNumeros(n: Int): String{
+    fun soNumeros(n: Int): String {
         var senha = ""
-        repeat(n){
+        repeat(n) {
             senha += numeros[(0 until numeros.size).random()].toString()
         }
         return senha
     }
 
-    fun soEspeciais(n: Int): String{
+    fun soEspeciais(n: Int): String {
+        var senha = ""
+        repeat(n) {
+            senha += especiais[(0 until numeros.size).random()]
+        }
+        return senha
+    }
+
+    fun letrasENumeros(n: Int): String{
         var senha = ""
         repeat(n){
-            senha += especiais[(0 until numeros.size).random()]
+            when((1..2).random()){
+                1 -> {
+                    senha += soLetras(1)
+                }
+                2 -> {
+                    senha += soNumeros(1)
+                }
+            }
+        }
+        return senha
+    }
+
+    fun tudoMisturado(n: Int): String {
+        var senha = ""
+        repeat(n) {
+            when ((1..3).random()) {
+                1 -> {
+                    senha += soLetras(1)
+                }
+                2 -> {
+                    senha += soNumeros(1)
+                }
+                3 -> {
+                    senha += soEspeciais(1)
+                }
+            }
         }
         return senha
     }
