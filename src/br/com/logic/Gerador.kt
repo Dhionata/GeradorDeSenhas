@@ -96,7 +96,8 @@ class Gerador {
         "º",
         "'",
         "=",
-        "§"
+        "§",
+        "|"
     )
 
     fun soLetras(n: Int): String {
@@ -110,7 +111,7 @@ class Gerador {
     fun soNumeros(n: Int): String {
         var senha = ""
         repeat(n) {
-            senha += numeros[(0 until numeros.size).random()].toString()
+            senha += numeros[(0 until numeros.size).random()]
         }
         return senha
     }
@@ -118,15 +119,15 @@ class Gerador {
     fun soEspeciais(n: Int): String {
         var senha = ""
         repeat(n) {
-            senha += especiais[(0 until numeros.size).random()]
+            senha += especiais[(0 until especiais.size).random()]
         }
         return senha
     }
 
-    fun letrasENumeros(n: Int): String{
+    fun letrasENumeros(n: Int): String {
         var senha = ""
-        repeat(n){
-            when((1..2).random()){
+        repeat(n) {
+            when ((1..2).random()) {
                 1 -> {
                     senha += soLetras(1)
                 }
