@@ -56,7 +56,6 @@ class Gerador {
         "z"
     )
     private val numeros = arrayListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
-
     private val especiais = arrayListOf(
         "!",
         "@",

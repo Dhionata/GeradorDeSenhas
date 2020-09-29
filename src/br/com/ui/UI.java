@@ -29,14 +29,14 @@ public class UI {
         textNumero.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if(!textNumero.getText().equals("")) {
+                if (!textNumero.getText().equals("")) {
                     gerarSenha();
                 }
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if(!textNumero.getText().equals("")) {
+                if (!textNumero.getText().equals("")) {
                     gerarSenha();
                 }
             }
@@ -52,7 +52,7 @@ public class UI {
             senha = new Gerador().tudoMisturado(Integer.parseInt(textNumero.getText()));
             copy();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(rootPane, "Deu ruim cara...\n--Erro--\n\n"+ex, "Vixi...", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, "Deu ruim cara...\n--Erro--\n\n" + ex, "Vixi...", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -72,8 +72,7 @@ public class UI {
 
     private void copy() {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        StringSelection selection = new StringSelection(senha);
-        clipboard.setContents(selection, null);
+        clipboard.setContents(new StringSelection(senha), null);
     }
 }
 
