@@ -16,7 +16,7 @@ public class UI {
     private String senha;
 
 
-    public UI() {
+    private UI() {
 
         textNumero.addFocusListener(new FocusAdapter() {
             @Override
