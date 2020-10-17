@@ -1,6 +1,6 @@
 package br.com.logic
 
-class Gerador {
+object Gerador {
     private val letras = arrayListOf(
         "A",
         "B",
@@ -99,6 +99,7 @@ class Gerador {
         "|"
     )
 
+    @JvmStatic
     fun soLetras(n: Int): String {
         var senha = ""
         repeat(n) {
@@ -107,6 +108,7 @@ class Gerador {
         return senha
     }
 
+    @JvmStatic
     fun soNumeros(n: Int): String {
         var senha = ""
         repeat(n) {
@@ -115,6 +117,7 @@ class Gerador {
         return senha
     }
 
+    @JvmStatic
     fun soEspeciais(n: Int): String {
         var senha = ""
         repeat(n) {
@@ -123,6 +126,7 @@ class Gerador {
         return senha
     }
 
+    @JvmStatic
     fun letrasENumeros(n: Int): String {
         var senha = ""
         repeat(n) {
@@ -138,6 +142,7 @@ class Gerador {
         return senha
     }
 
+    @JvmStatic
     fun tudoMisturado(n: Int): String {
         var senha = ""
         repeat(n) {

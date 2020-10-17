@@ -13,6 +13,9 @@ import java.awt.event.*;
 public class UI {
     private JPanel rootPane;
     private JTextField textNumero;
+    private JRadioButton radioLetras;
+    private JRadioButton letrasENumerosRadioButton;
+    private JRadioButton letrasNumerosECaracteresRadioButton;
     private String senha;
 
 
@@ -29,27 +32,55 @@ public class UI {
         textNumero.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if (!textNumero.getText().equals("")) {
-                    gerarSenha();
-                }
+                qualVaiGerar();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (!textNumero.getText().equals("")) {
-                    gerarSenha();
-                }
+                qualVaiGerar();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
             }
         });
+
+        ActionListener listener1 = e -> {
+            System.out.println(e.getActionCommand());
+            switch (e.getActionCommand()) {
+                case "Letras":
+                    letrasENumerosRadioButton.setSelected(false);
+                    letrasNumerosECaracteresRadioButton.setSelected(false);
+                    break;
+                case "Letras e Números":
+                    radioLetras.setSelected(false);
+                    letrasNumerosECaracteresRadioButton.setSelected(false);
+                    break;
+                case "Letras, Números e Caracteres":
+                    radioLetras.setSelected(false);
+                    letrasENumerosRadioButton.setSelected(false);
+                    break;
+            }
+        };
+
+        radioLetras.addActionListener(listener1);
+        letrasENumerosRadioButton.addActionListener(listener1);
+        letrasNumerosECaracteresRadioButton.addActionListener(listener1);
     }
 
-    private void gerarSenha() {
+    private void gerarSenha(int i) {
         try {
-            senha = new Gerador().tudoMisturado(Integer.parseInt(textNumero.getText()));
+            switch (i) {
+                case 1:
+                    senha = Gerador.soLetras(Integer.parseInt(textNumero.getText()));
+                    break;
+                case 2:
+                    senha = Gerador.letrasENumeros(Integer.parseInt(textNumero.getText()));
+                    break;
+                case 3:
+                    senha = Gerador.tudoMisturado(Integer.parseInt(textNumero.getText()));
+                    break;
+            }
             copy();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(rootPane, "Deu ruim cara...\n--Erro--\n\n" + ex, "Vixi...", JOptionPane.ERROR_MESSAGE);
@@ -73,6 +104,21 @@ public class UI {
     private void copy() {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(new StringSelection(senha), null);
+        System.out.println(senha);
+    }
+
+    private void qualVaiGerar() {
+        if (!textNumero.getText().equals("")) {
+            int i = 0;
+            if (radioLetras.isSelected()) {
+                i = 1;
+            } else if (letrasENumerosRadioButton.isSelected()) {
+                i = 2;
+            } else if (letrasNumerosECaracteresRadioButton.isSelected()) {
+                i = 3;
+            }
+            gerarSenha(i);
+        }
     }
 }
 
