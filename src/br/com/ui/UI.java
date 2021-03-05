@@ -8,7 +8,8 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class UI {
     private JPanel rootPane;
@@ -18,9 +19,7 @@ public class UI {
     private JRadioButton letrasNumerosECaracteresRadioButton;
     private String senha;
 
-
-    private UI() {
-
+    private UI() { //Núcleo da UI
         textNumero.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -45,41 +44,16 @@ public class UI {
             }
         });
 
-        ActionListener listener1 = e -> {
-            System.out.println(e.getActionCommand());
-            switch (e.getActionCommand()) {
-                case "Letras":
-                    letrasENumerosRadioButton.setSelected(false);
-                    letrasNumerosECaracteresRadioButton.setSelected(false);
-                    break;
-                case "Letras e Números":
-                    radioLetras.setSelected(false);
-                    letrasNumerosECaracteresRadioButton.setSelected(false);
-                    break;
-                case "Letras, Números e Caracteres":
-                    radioLetras.setSelected(false);
-                    letrasENumerosRadioButton.setSelected(false);
-                    break;
-            }
-        };
-
-        radioLetras.addActionListener(listener1);
-        letrasENumerosRadioButton.addActionListener(listener1);
-        letrasNumerosECaracteresRadioButton.addActionListener(listener1);
     }
 
     private void gerarSenha(int i) {
         try {
-            switch (i) {
-                case 1:
-                    senha = Gerador.soLetras(Integer.parseInt(textNumero.getText()));
-                    break;
-                case 2:
-                    senha = Gerador.letrasENumeros(Integer.parseInt(textNumero.getText()));
-                    break;
-                case 3:
-                    senha = Gerador.tudoMisturado(Integer.parseInt(textNumero.getText()));
-                    break;
+            if (i == 1) {
+                senha = Gerador.soLetras(Integer.parseInt(textNumero.getText()));
+            } else if (i == 2) {
+                senha = Gerador.letrasENumeros(Integer.parseInt(textNumero.getText()));
+            } else if (i == 3) {
+                senha = Gerador.tudoMisturado(Integer.parseInt(textNumero.getText()));
             }
             copy();
         } catch (Exception ex) {
@@ -107,8 +81,8 @@ public class UI {
         System.out.println(senha);
     }
 
-    private void qualVaiGerar() {
-        if (!textNumero.getText().equals("")) {
+    private void qualVaiGerar() {//equal == comparação
+        if (!textNumero.getText().isBlank()) {
             int i = 0;
             if (radioLetras.isSelected()) {
                 i = 1;
@@ -116,12 +90,10 @@ public class UI {
                 i = 2;
             } else if (letrasNumerosECaracteresRadioButton.isSelected()) {
                 i = 3;
+            } else {
+                JOptionPane.showMessageDialog(null, "Rapaz, tem que selecionar um dos 3 tipos de senhas...");
             }
             gerarSenha(i);
         }
     }
 }
-
-
-
-
