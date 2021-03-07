@@ -1,4 +1,4 @@
-package br.com
+package br.com.logic
 
 import br.com.ui.UI
 
