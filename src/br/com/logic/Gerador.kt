@@ -99,29 +99,17 @@ object Gerador {
         "|"
     )
 
-    @JvmStatic
-    fun soLetras(n: Int): String {
-        var senha = ""
-        repeat(n) {
-            senha += letras[(0 until letras.size).random()]
-        }
-        return senha
-    }
+    private fun soLetras(): String = letras[(0 until letras.size).random()]
+
+    private fun soNumeros(): String = numeros[(0 until numeros.size).random()].toString()
+
+    private fun soEspeciais(): String = especiais[(0 until especiais.size).random()]
 
     @JvmStatic
-    fun soNumeros(n: Int): String {
+    fun letras(n: Int): String {
         var senha = ""
         repeat(n) {
-            senha += numeros[(0 until numeros.size).random()]
-        }
-        return senha
-    }
-
-    @JvmStatic
-    fun soEspeciais(n: Int): String {
-        var senha = ""
-        repeat(n) {
-            senha += especiais[(0 until especiais.size).random()]
+            senha += soLetras()
         }
         return senha
     }
@@ -132,10 +120,10 @@ object Gerador {
         repeat(n) {
             when ((1..2).random()) {
                 1 -> {
-                    senha += soLetras(1)
+                    senha += soLetras()
                 }
                 2 -> {
-                    senha += soNumeros(1)
+                    senha += soNumeros()
                 }
             }
         }
@@ -148,13 +136,13 @@ object Gerador {
         repeat(n) {
             when ((1..3).random()) {
                 1 -> {
-                    senha += soLetras(1)
+                    senha += soLetras()
                 }
                 2 -> {
-                    senha += soNumeros(1)
+                    senha += soNumeros()
                 }
                 3 -> {
-                    senha += soEspeciais(1)
+                    senha += soEspeciais()
                 }
             }
         }
