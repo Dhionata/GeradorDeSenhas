@@ -43,7 +43,6 @@ public class UI {
             public void changedUpdate(DocumentEvent e) {
             }
         });
-
     }
 
     private static void createUIComponents() {
@@ -64,41 +63,25 @@ public class UI {
         try {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(new StringSelection(senha), null);
-            System.out.println(senha);
+            senha = null;
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(rootPane, "Reportar ao desenvolvedor!\n" + e.getMessage());
         }
     }
 
-    private void gerarSenha(int i) {
-        try {
-            if (i == 1) {
-                senha = Gerador.letras(Integer.parseInt(textNumero.getText()));
-            } else if (i == 2) {
-                senha = Gerador.letrasENumeros(Integer.parseInt(textNumero.getText()));
-            } else if (i == 3) {
-                senha = Gerador.tudoMisturado(Integer.parseInt(textNumero.getText()));
-            }
-            copy();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(rootPane, "Deu ruim cara...\n--Erro--\n\n" + ex, "Vixi...", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void qualVaiGerar() {//equal == comparação
+    private void qualVaiGerar() {
         if (!textNumero.getText().isBlank()) {
             try {
                 int temp = Integer.parseInt(textNumero.getText());
                 if (temp > 0) {
-                    int i = 0;
                     if (radioLetras.isSelected()) {
-                        i = 1;
+                        senha = Gerador.letras(Integer.parseInt(textNumero.getText()));
                     } else if (letrasENumerosRadioButton.isSelected()) {
-                        i = 2;
+                        senha = Gerador.letrasENumeros(Integer.parseInt(textNumero.getText()));
                     } else if (letrasNumerosECaracteresRadioButton.isSelected()) {
-                        i = 3;
+                        senha = Gerador.tudoMisturado(Integer.parseInt(textNumero.getText()));
                     }
-                    gerarSenha(i);
+                    copy();
                 } else {
                     JOptionPane.showMessageDialog(rootPane, "Deve-se ter um valor maior que 0.");
                 }
