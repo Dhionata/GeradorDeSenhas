@@ -17,6 +17,7 @@ public class UI {
     private JRadioButton radioLetras;
     private JRadioButton letrasENumerosRadioButton;
     private JRadioButton letrasNumerosECaracteresRadioButton;
+    private JRadioButton radioNumeros;
     private String senha;
 
     private UI() { //Núcleo da UI
@@ -75,11 +76,13 @@ public class UI {
                 int temp = Integer.parseInt(textNumero.getText());
                 if (temp > 0) {
                     if (radioLetras.isSelected()) {
-                        senha = Gerador.letras(Integer.parseInt(textNumero.getText()));
+                        senha = Gerador.letras(temp);
                     } else if (letrasENumerosRadioButton.isSelected()) {
-                        senha = Gerador.letrasENumeros(Integer.parseInt(textNumero.getText()));
+                        senha = Gerador.letrasENumeros(temp);
                     } else if (letrasNumerosECaracteresRadioButton.isSelected()) {
-                        senha = Gerador.tudoMisturado(Integer.parseInt(textNumero.getText()));
+                        senha = Gerador.tudoMisturado(temp);
+                    } else if (radioNumeros.isSelected()) {
+                        senha = Gerador.numeros(temp);
                     }
                     copy();
                 } else {
