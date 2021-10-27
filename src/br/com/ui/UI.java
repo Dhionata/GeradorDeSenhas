@@ -65,6 +65,7 @@ public class UI {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(new StringSelection(senha), null);
             senha = null;
+            System.gc(); //Limpar memória.
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(rootPane, "Reportar ao desenvolvedor!\n" + e.getMessage());
         }
