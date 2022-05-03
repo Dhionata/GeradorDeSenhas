@@ -20,6 +20,10 @@ public class UI {
     private JRadioButton radioNumeros;
     private String senha;
 
+    public static void comecar() {
+        createUIComponents();
+    }
+
     private UI() { //Núcleo da UI
         textNumero.addFocusListener(new FocusAdapter() {
             @Override
@@ -56,15 +60,10 @@ public class UI {
         frame.setLocationRelativeTo(null);
     }
 
-    public static void comecar() {
-        createUIComponents();
-    }
-
     private void copy() {
         try {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(new StringSelection(senha), null);
-            senha = null;
             System.gc(); //Limpar memória.
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(rootPane, "Reportar ao desenvolvedor!\n" + e.getMessage());
