@@ -1,7 +1,7 @@
 package br.com.logic
 
 object Gerador {
-    private val letras = arrayListOf(
+    private val letras = listOf(
         "A",
         "B",
         "C",
@@ -55,8 +55,8 @@ object Gerador {
         "y",
         "z"
     )
-    private val numeros = arrayListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
-    private val especiais = arrayListOf(
+    private val numeros = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+    private val especiais = listOf(
         "!",
         "@",
         "²",
@@ -99,62 +99,25 @@ object Gerador {
         "|"
     )
 
-    private fun soLetras(): String = letras[(0 until letras.size).random()]
+    private fun soLetras(): String = letras.random()
 
-    private fun soNumeros(): Int = numeros[(0 until numeros.size).random()]
+    private fun soNumeros(): Int = numeros.random()
 
-    private fun soEspeciais(): String = especiais[(0 until especiais.size).random()]
-
-    @JvmStatic
-    fun letras(n: Int): String {
-        var senha = ""
-        repeat(n) {
-            senha += soLetras()
-        }
-        return senha
-    }
+    private fun soEspeciais(): String = especiais.random()
 
     @JvmStatic
-    fun numeros(n: Int): String {
-        var senha = ""
-        repeat(n) {
-            senha += soNumeros()
-        }
-        return senha
-    }
+    fun letras(n: Int): String = StringBuilder().apply { repeat(n) { append(soLetras()) } }.toString()
 
     @JvmStatic
-    fun letrasENumeros(n: Int): String {
-        var senha = ""
-        repeat(n) {
-            when ((1..2).random()) {
-                1 -> {
-                    senha += soLetras()
-                }
-                2 -> {
-                    senha += soNumeros()
-                }
-            }
-        }
-        return senha
-    }
+    fun numeros(n: Int): String = StringBuilder().apply { repeat(n) { append(soNumeros()) } }.toString()
 
     @JvmStatic
-    fun tudoMisturado(n: Int): String {
-        var senha = ""
-        repeat(n) {
-            when ((1..3).random()) {
-                1 -> {
-                    senha += soLetras()
-                }
-                2 -> {
-                    senha += soNumeros()
-                }
-                3 -> {
-                    senha += soEspeciais()
-                }
-            }
-        }
-        return senha
-    }
+    fun letrasENumeros(n: Int): String =
+        StringBuilder().apply { repeat(n) { append(listOf(soLetras(), soNumeros()).random()) } }.toString()
+
+    @JvmStatic
+    fun tudoMisturado(n: Int): String =
+        StringBuilder().apply { repeat(n) { append(listOf(soLetras(), soNumeros(), soEspeciais()).random()) } }
+            .toString()
+
 }
