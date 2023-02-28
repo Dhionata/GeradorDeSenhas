@@ -17,17 +17,17 @@
           <text value="Gerador de senhas"/>
         </properties>
       </component>
-      <component id="8470a" class="javax.swing.JTextField" binding="textNumero">
+      <component id="58c28" class="javax.swing.JFormattedTextField" binding="textNumber">
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
         <properties>
-          <text value="Número de caracteres"/>
+          <text value=""/>
         </properties>
       </component>
-      <component id="40b3" class="javax.swing.JRadioButton" binding="radioLetras">
+      <component id="40b3" class="javax.swing.JRadioButton" binding="radioLatters">
         <constraints>
           <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -36,7 +36,7 @@
           <text value="Letras"/>
         </properties>
       </component>
-      <component id="7b3b2" class="javax.swing.JRadioButton" binding="letrasENumerosRadioButton" default-binding="true">
+      <component id="7b3b2" class="javax.swing.JRadioButton" binding="lettersAndNumbersRadioButton" default-binding="true">
         <constraints>
           <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -45,7 +45,7 @@
           <text value="Letras e Números"/>
         </properties>
       </component>
-      <component id="95350" class="javax.swing.JRadioButton" binding="letrasNumerosECaracteresRadioButton" default-binding="true">
+      <component id="95350" class="javax.swing.JRadioButton" binding="lettersNumbersAndCaracteresRadioButton" default-binding="true">
         <constraints>
           <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>
@@ -54,7 +54,7 @@
           <text value="Letras, Números e Caracteres"/>
         </properties>
       </component>
-      <component id="1aeff" class="javax.swing.JRadioButton" binding="radioNumeros">
+      <component id="1aeff" class="javax.swing.JRadioButton" binding="radioNumbers">
         <constraints>
           <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>

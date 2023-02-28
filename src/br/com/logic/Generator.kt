@@ -1,7 +1,7 @@
 package br.com.logic
 
-object Gerador {
-    private val letras = listOf(
+object Generator {
+    private val letters = listOf(
         "A",
         "B",
         "C",
@@ -55,8 +55,8 @@ object Gerador {
         "y",
         "z"
     )
-    private val numeros = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
-    private val especiais = listOf(
+    private val numbers = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+    private val specials = listOf(
         "!",
         "@",
         "²",
@@ -99,25 +99,25 @@ object Gerador {
         "|"
     )
 
-    private fun soLetras(): String = letras.random()
+    private fun onlyLetters(): String = letters.random()
 
-    private fun soNumeros(): Int = numeros.random()
+    private fun onlyNumbers(): Int = numbers.random()
 
-    private fun soEspeciais(): String = especiais.random()
-
-    @JvmStatic
-    fun letras(n: Int): String = StringBuilder().apply { repeat(n) { append(soLetras()) } }.toString()
+    private fun onlySpecials(): String = specials.random()
 
     @JvmStatic
-    fun numeros(n: Int): String = StringBuilder().apply { repeat(n) { append(soNumeros()) } }.toString()
+    fun letters(n: Int): String = StringBuilder().apply { repeat(n) { append(onlyLetters()) } }.toString()
 
     @JvmStatic
-    fun letrasENumeros(n: Int): String =
-        StringBuilder().apply { repeat(n) { append(listOf(soLetras(), soNumeros()).random()) } }.toString()
+    fun numbers(n: Int): String = StringBuilder().apply { repeat(n) { append(onlyNumbers()) } }.toString()
 
     @JvmStatic
-    fun tudoMisturado(n: Int): String =
-        StringBuilder().apply { repeat(n) { append(listOf(soLetras(), soNumeros(), soEspeciais()).random()) } }
+    fun lettersAndNumbers(n: Int): String =
+        StringBuilder().apply { repeat(n) { append(listOf(onlyLetters(), onlyNumbers()).random()) } }.toString()
+
+    @JvmStatic
+    fun allMixed(n: Int): String =
+        StringBuilder().apply { repeat(n) { append(listOf(onlyLetters(), onlyNumbers(), onlySpecials()).random()) } }
             .toString()
 
 }
