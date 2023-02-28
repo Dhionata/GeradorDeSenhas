@@ -1,17 +1,14 @@
-package br.com.ui;
-
-import br.com.logic.Generator;
-
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
-public class UI {
+public final class UserInterface {
     private JPanel rootPane;
     private JFormattedTextField textNumber;
     private JRadioButton radioLatters;
@@ -24,7 +21,7 @@ public class UI {
         createUIComponents();
     }
 
-    private UI() { //Núcleo da UI
+    private UserInterface() { //Núcleo da UserInterface
         textNumber.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -33,7 +30,8 @@ public class UI {
             }
         });
 
-        textNumber.getDocument().addDocumentListener(new DocumentListener() {
+        Document document = textNumber.getDocument();
+        document.addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 qualVaiGerar();
@@ -52,8 +50,8 @@ public class UI {
 
     private static void createUIComponents() {
         JFrame frame = new JFrame("Gui");
-        frame.setContentPane(new UI().rootPane);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(new UserInterface().rootPane);
+        frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         frame.setResizable(false);
@@ -64,17 +62,19 @@ public class UI {
         try {
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(new StringSelection(senha), null);
-            System.gc(); //Limpar memória.
         } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(rootPane, "Reportar ao desenvolvedor!\n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(rootPane, "Reportar ao desenvolvedor!\n%s".formatted(e.getMessage()),
+                    "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void qualVaiGerar() {
-        if (!textNumber.getText().isBlank()) {
+        if (textNumber.getText().isBlank()) {
+            System.out.println("Rapaz, isso tá vazio!");
+        } else {
             try {
                 int temp = Integer.parseInt(textNumber.getText());
-                if (temp > 0) {
+                if (0 < temp) {
                     if (radioLatters.isSelected()) {
                         senha = Generator.letters(temp);
                     } else if (lettersAndNumbersRadioButton.isSelected()) {
@@ -86,19 +86,18 @@ public class UI {
                     } else {
                         throw new Exception("Rapaz... como vc tirou o ponto????");
                     }
-                    System.out.println("vai copiar...\nSenha:\n" + senha);
+                    System.out.printf("vai copiar...\nSenha:\n%s%n", senha);
                     copy();
                 } else {
-                    JOptionPane.showMessageDialog(rootPane, "Deve-se ter um valor maior que 0.", "Então...", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(rootPane, "Deve-se ter um valor maior que 0.",
+                            "Então...", JOptionPane.INFORMATION_MESSAGE);
                 }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(rootPane, "Tem que ser um valor númerico !\n" + e.getMessage(), "Deui ruim!", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception e) {
+            } catch (HeadlessException | NumberFormatException e) {
                 JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Deu Ruim!", JOptionPane.ERROR_MESSAGE);
+                throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-
-        } else {
-            System.out.println("Rapaz, isso tá vazio!");
         }
     }
 }
