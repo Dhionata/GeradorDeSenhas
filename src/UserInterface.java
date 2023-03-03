@@ -1,51 +1,18 @@
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 public final class UserInterface {
+    private static final int INT = 10000000;
     private JPanel rootPane;
     private JFormattedTextField textNumber;
-    private JRadioButton radioLatters;
-    private JRadioButton lettersAndNumbersRadioButton;
-    private JRadioButton lettersNumbersAndCaracteresRadioButton;
-    private JRadioButton radioNumbers;
-    private String senha;
+    private JComboBox comboBox1;
 
     public static void comecar() {
         createUIComponents();
-    }
-
-    private UserInterface() { //Núcleo da UserInterface
-        textNumber.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                super.focusGained(e);
-                textNumber.setValue("");
-            }
-        });
-
-        Document document = textNumber.getDocument();
-        document.addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                qualVaiGerar();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                qualVaiGerar();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-            }
-        });
     }
 
     private static void createUIComponents() {
@@ -58,46 +25,104 @@ public final class UserInterface {
         frame.setLocationRelativeTo(null);
     }
 
-    private void copy() {
-        try {
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(new StringSelection(senha), null);
-        } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(rootPane, "Reportar ao desenvolvedor!\n%s".formatted(e.getMessage()),
-                    "Erro", JOptionPane.ERROR_MESSAGE);
+    private UserInterface() { // Núcleo da UserInterface
+        textNumber.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                handleNumericInputChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                handleNumericInputChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                // Nada a ser feito quando o estilo do texto é alterado
+            }
+        });
+    }
+
+    private void handleNumericInputChange() {
+        if (isValidNumericInput()) {
+            whichWillGenerate();
         }
     }
 
-    private void qualVaiGerar() {
+    private boolean isValidNumericInput() {
         if (textNumber.getText().isBlank()) {
-            System.out.println("Rapaz, isso tá vazio!");
-        } else {
-            try {
-                int temp = Integer.parseInt(textNumber.getText());
-                if (0 < temp) {
-                    if (radioLatters.isSelected()) {
-                        senha = Generator.letters(temp);
-                    } else if (lettersAndNumbersRadioButton.isSelected()) {
-                        senha = Generator.lettersAndNumbers(temp);
-                    } else if (lettersNumbersAndCaracteresRadioButton.isSelected()) {
-                        senha = Generator.allMixed(temp);
-                    } else if (radioNumbers.isSelected()) {
-                        senha = Generator.numbers(temp);
-                    } else {
-                        throw new Exception("Rapaz... como vc tirou o ponto????");
-                    }
-                    System.out.printf("vai copiar...\nSenha:\n%s%n", senha);
-                    copy();
-                } else {
-                    JOptionPane.showMessageDialog(rootPane, "Deve-se ter um valor maior que 0.",
-                            "Então...", JOptionPane.INFORMATION_MESSAGE);
-                }
-            } catch (HeadlessException | NumberFormatException e) {
-                JOptionPane.showMessageDialog(rootPane, e.getMessage(), "Deu Ruim!", JOptionPane.ERROR_MESSAGE);
-                throw new RuntimeException(e);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
+            System.err.println("O campo está vazio!");
+            return false;
+        }
+
+        String input = textNumber.getText();
+        try {
+            int number = Integer.parseInt(input);
+            if (number > INT && !isSafeToContinue()) {
+                System.out.println("O usuário optou por não prosseguir.");
+                return false;
             }
+            return true;
+        } catch (NumberFormatException ex) {
+            System.err.printf("O valor \"%s\" não é um número válido.%n", input);
+            SwingUtilities.invokeLater(() -> textNumber.setText(""));
+            return false;
         }
     }
+
+    private boolean isSafeToContinue() {
+        String message = "O valor digitado é muito grande e pode causar problemas de memória. Deseja continuar?";
+        int option = JOptionPane.showConfirmDialog(rootPane, message, "Atenção", JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+        return option == JOptionPane.OK_OPTION;
+    }
+
+    private void whichWillGenerate() {
+        try {
+            int temp = Integer.parseInt(textNumber.getText());
+            if (temp <= 0) {
+                JOptionPane.showMessageDialog(rootPane, "Deve-se ter um valor maior que 0.",
+                        "Então...", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            var temp2 = generatePassword(temp);
+            System.out.printf("Senha gerada:\n%s%n", temp2);
+            copyToClipboard(temp2);
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor, insira um número válido.",
+                    "Deu Ruim!", JOptionPane.ERROR_MESSAGE);
+        } catch (HeadlessException e) {
+            throw new RuntimeException(e);
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(rootPane, e.getMessage(),
+                    "Deu Ruim!", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private String generatePassword(int length) {
+        String password = switch (comboBox1.getSelectedIndex()) {
+            case 0 -> Generator.letters(length);
+            case 1 -> Generator.numbers(length);
+            case 2 -> Generator.lettersAndAccents(length);
+            case 3 -> Generator.lettersAndNumbers(length);
+            case 4 -> Generator.letterAccentsAndNumbers(length);
+            case 5 -> Generator.lettersNumbersAndCaracteres(length);
+            case 6 -> Generator.allMixed(length);
+            default -> throw new IllegalArgumentException("Invalid option selected.");
+        };
+
+        copyToClipboard(password);
+        return password;
+    }
+
+
+    private static void copyToClipboard(String password) {
+        StringSelection selection = new StringSelection(password);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
+    }
+
 }

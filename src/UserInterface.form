@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="UserInterface">
-  <grid id="27dc6" binding="rootPane" layout-manager="GridLayoutManager" row-count="6" column-count="3"
-  same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="rootPane" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="220" height="181"/>
+      <xy x="20" y="20" width="342" height="96"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
       <component id="404d9" class="javax.swing.JLabel">
         <constraints>
-          <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0"
-          indent="0" use-parent-layout="false"/>
+          <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <font size="16"/>
@@ -21,55 +19,28 @@
       </component>
       <component id="58c28" class="javax.swing.JFormattedTextField" binding="textNumber">
         <constraints>
-          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0"
-          indent="0" use-parent-layout="false">
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
         <properties>
-          <text value="tamanho da senha"/>
+          <text value=""/>
         </properties>
       </component>
-      <component id="40b3" class="javax.swing.JRadioButton" binding="radioLatters">
+      <component id="ee1d7" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
         <constraints>
-          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3"
-          indent="0" use-parent-layout="false"/>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
-          <selected value="true"/>
-          <text value="Letras"/>
-        </properties>
-      </component>
-      <component id="7b3b2" class="javax.swing.JRadioButton" binding="lettersAndNumbersRadioButton"
-      default-binding="true">
-        <constraints>
-          <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3"
-           indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <selected value="false"/>
-          <text value="Letras e Números"/>
-        </properties>
-      </component>
-      <component id="95350" class="javax.swing.JRadioButton" binding="lettersNumbersAndCaracteresRadioButton"
-      default-binding="true">
-        <constraints>
-          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3"
-           indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <selected value="false"/>
-          <text value="Letras, Números e Caracteres"/>
-        </properties>
-      </component>
-      <component id="1aeff" class="javax.swing.JRadioButton" binding="radioNumbers">
-        <constraints>
-          <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="3"
-          indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <selected value="false"/>
-          <text value="Números"/>
+          <model>
+            <item value="Letras"/>
+            <item value="Números"/>
+            <item value="Letras e Acentos"/>
+            <item value="Letras e Números"/>
+            <item value="Letras, Acentos e Números"/>
+            <item value="Letras, Números e Caracteres"/>
+            <item value="Letras,Acentos, Números, Caracteres e Especiais"/>
+          </model>
         </properties>
       </component>
     </children>
@@ -81,6 +52,9 @@
       <member id="7b3b2"/>
       <member id="95350"/>
       <member id="1aeff"/>
+      <member id="ca218"/>
+      <member id="6b2a4"/>
+      <member id="c2e9f"/>
     </group>
   </buttonGroups>
 </form>

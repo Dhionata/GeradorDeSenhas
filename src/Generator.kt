@@ -1,121 +1,55 @@
 object Generator {
-    private val letters = listOf(
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-            "G",
-            "H",
-            "I",
-            "J",
-            "K",
-            "L",
-            "M",
-            "N",
-            "O",
-            "P",
-            "Q",
-            "R",
-            "S",
-            "T",
-            "U",
-            "V",
-            "W",
-            "X",
-            "Y",
-            "Z",
-            "a",
-            "b",
-            "c",
-            "d",
-            "e",
-            "f",
-            "g",
-            "h",
-            "i",
-            "j",
-            "k",
-            "l",
-            "m",
-            "n",
-            "o",
-            "p",
-            "q",
-            "r",
-            "s",
-            "t",
-            "u",
-            "v",
-            "w",
-            "x",
-            "y",
-            "z"
-    )
-    private val numbers = listOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
-    private val specials = listOf(
-            "!",
-            "@",
-            "²",
-            "#",
-            "%",
-            "¨",
-            "$",
-            "&",
-            "*",
-            "(",
-            ")",
-            "-",
-            "_",
-            "+",
-            "/",
-            ".",
-            "£",
-            "³",
-            "¢",
-            "¬",
-            "?",
-            "<",
-            ">",
-            ";",
-            ":",
-            "°",
-            "ç",
-            "Ç",
-            "~",
-            "^",
-            "{",
-            "}",
-            "ª",
-            "[",
-            "]",
-            "º",
-            "'",
-            "=",
-            "§",
-            "|"
-    )
+    private const val letters = "abcçdefghijklmnopqrstuvwxyzABCÇDEFGHIJKLMNOPQRSTUVWXYZ"
+    private const val numbers = "0123456789"
+    private const val accents = "àáâãäèéêëìíîïòóôõöùúûüýÿ"
+    private val unicodeChars = CharRange('\u0100', '\uFFFF').filter { !it.isLetterOrDigit() }
+    private val specials = "!@²#%¨$&*()-_+/.\$£³¢¬?<>,;:°çÇ~^{}ª[]º'|".toCharArray()
 
-    private fun onlyLetters(): String = letters.random()
-
-    private fun onlyNumbers(): Int = numbers.random()
-
-    private fun onlySpecials(): String = specials.random()
+    private fun onlyLetters(): Char = letters.random()
+    private fun onlyNumbers(): Char = numbers.random()
+    private fun onlyAccents(): Char = accents.random()
+    private fun onlyUnicodeChars(): Char = unicodeChars.random()
+    private fun onlySpecials(): Char = specials.random()
 
     @JvmStatic
-    fun letters(n: Int): String = StringBuilder().apply { repeat(n) { append(onlyLetters()) } }.toString()
+    fun letters(n: Int): String = buildString { repeat(n) { append(onlyLetters()) } }
 
     @JvmStatic
-    fun numbers(n: Int): String = StringBuilder().apply { repeat(n) { append(onlyNumbers()) } }.toString()
+    fun numbers(n: Int): String = buildString { repeat(n) { append(onlyNumbers()) } }
+
+    @JvmStatic
+    fun lettersAndAccents(n: Int): String = buildString {
+        repeat(n) {
+            append(listOf(onlyLetters(), onlyAccents()).random())
+        }
+    }
 
     @JvmStatic
     fun lettersAndNumbers(n: Int): String =
-            StringBuilder().apply { repeat(n) { append(listOf(onlyLetters(), onlyNumbers()).random()) } }.toString()
+            buildString { repeat(n) { append(listOf(onlyLetters(), onlyNumbers()).random()) } }
+
 
     @JvmStatic
-    fun allMixed(n: Int): String =
-            StringBuilder().apply {
-                repeat(n) { append(listOf(onlyLetters(), onlyNumbers(), onlySpecials()).random()) }
-            }.toString()
+    fun letterAccentsAndNumbers(n: Int): String = buildString {
+        repeat(n) {
+            append(listOf(onlyLetters(), onlyAccents(), onlyNumbers()).random())
+        }
+    }
+
+    @JvmStatic
+    fun lettersNumbersAndCaracteres(n: Int): String = buildString {
+        repeat(n) {
+            append(listOf(onlyLetters(), onlyNumbers(), onlySpecials()).random())
+        }
+    }
+
+    @JvmStatic
+    fun allMixed(n: Int): String = buildString {
+        repeat(n) {
+            append(
+                    listOf(onlyLetters(), onlyNumbers(), onlyAccents(), onlyUnicodeChars(), onlySpecials()).random()
+            )
+        }
+    }
+
 }
