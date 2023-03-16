@@ -26,7 +26,7 @@ object Generator {
 
     @JvmStatic
     fun lettersAndNumbers(n: Int): String =
-            buildString { repeat(n) { append(listOf(onlyLetters(), onlyNumbers()).random()) } }
+        buildString { repeat(n) { append(listOf(onlyLetters(), onlyNumbers()).random()) } }
 
 
     @JvmStatic
@@ -47,7 +47,7 @@ object Generator {
     fun allMixed(n: Int): String = buildString {
         repeat(n) {
             append(
-                    listOf(onlyLetters(), onlyNumbers(), onlyAccents(), onlyUnicodeChars(), onlySpecials()).random()
+                listOf(onlyLetters(), onlyNumbers(), onlyAccents(), onlyUnicodeChars(), onlySpecials()).random()
             )
         }
     }
