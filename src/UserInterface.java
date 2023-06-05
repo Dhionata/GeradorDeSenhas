@@ -11,20 +11,6 @@ public final class UserInterface {
     private JFormattedTextField textNumber;
     private JComboBox comboBox1;
 
-    public static void comecar() {
-        createUIComponents();
-    }
-
-    private static void createUIComponents() {
-        JFrame frame = new JFrame("Gui");
-        frame.setContentPane(new UserInterface().rootPane);
-        frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
-    }
-
     private UserInterface() { // Núcleo da UserInterface
         textNumber.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -42,6 +28,26 @@ public final class UserInterface {
                 // Nada a ser feito quando o estilo do texto é alterado
             }
         });
+    }
+
+    public static void comecar() {
+        createUIComponents();
+    }
+
+    private static void createUIComponents() {
+        JFrame frame = new JFrame("Gui");
+        frame.setContentPane(new UserInterface().rootPane);
+        frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+    }
+
+    private static void copyToClipboard(String password) {
+        StringSelection selection = new StringSelection(password);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
     }
 
     private void handleNumericInputChange() {
@@ -116,13 +122,6 @@ public final class UserInterface {
 
         copyToClipboard(password);
         return password;
-    }
-
-
-    private static void copyToClipboard(String password) {
-        StringSelection selection = new StringSelection(password);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(selection, selection);
     }
 
 }
