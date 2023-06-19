@@ -9,7 +9,7 @@ public final class UserInterface {
     private static final int INT = 10000000;
     private JPanel rootPane;
     private JFormattedTextField textNumber;
-    private JComboBox comboBox1;
+    private JComboBox<String> comboBox1;
 
     private UserInterface() { // Núcleo da UserInterface
         textNumber.getDocument().addDocumentListener(new DocumentListener() {
@@ -25,9 +25,12 @@ public final class UserInterface {
 
             @Override
             public void changedUpdate(DocumentEvent e) {
+                // Não é acionado para alterações no conteúdo do texto
                 // Nada a ser feito quando o estilo do texto é alterado
             }
         });
+
+        comboBox1.addItemListener(e -> SwingUtilities.invokeLater(() -> textNumber.setText("")));
     }
 
     public static void comecar() {
@@ -48,22 +51,23 @@ public final class UserInterface {
         StringSelection selection = new StringSelection(password);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(selection, selection);
+        System.gc();
     }
 
     private void handleNumericInputChange() {
-        if (isValidNumericInput()) {
+        if (!textNumber.getText().isBlank() && isValidNumericInput()) {
             whichWillGenerate();
+        } else {
+            SwingUtilities.invokeLater(() -> textNumber.setText(""));
         }
     }
 
     private boolean isValidNumericInput() {
-        if (textNumber.getText().isBlank()) {
-            System.err.println("O campo está vazio!");
-            return false;
-        }
-
         String input = textNumber.getText();
         try {
+            if (!input.matches("\\d+")) {
+                throw new NumberFormatException("Não passou pelo Regex!\n");
+            }
             int number = Integer.parseInt(input);
             if (number > INT && !isSafeToContinue()) {
                 System.out.println("O usuário optou por não prosseguir.");
@@ -71,8 +75,7 @@ public final class UserInterface {
             }
             return true;
         } catch (NumberFormatException ex) {
-            System.err.printf("O valor \"%s\" não é um número válido.%n", input);
-            SwingUtilities.invokeLater(() -> textNumber.setText(""));
+            System.err.printf("O valor \"%s\" não é um número válido.\nErro: %s", input, ex.getMessage());
             return false;
         }
     }
@@ -92,13 +95,10 @@ public final class UserInterface {
                         "Então...", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-
-            var temp2 = generatePassword(temp);
-            System.out.printf("Senha gerada:\n%s%n", temp2);
-            copyToClipboard(temp2);
+            generatePassword(temp);
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(rootPane, "Por favor, insira um número válido.",
+            JOptionPane.showMessageDialog(rootPane, "Por favor, insira um número válido.\nEx: " + e.getMessage(),
                     "Deu Ruim!", JOptionPane.ERROR_MESSAGE);
         } catch (HeadlessException e) {
             throw new RuntimeException(e);
@@ -108,7 +108,7 @@ public final class UserInterface {
         }
     }
 
-    private String generatePassword(int length) {
+    private void generatePassword(int length) {
         String password = switch (comboBox1.getSelectedIndex()) {
             case 0 -> Generator.letters(length);
             case 1 -> Generator.numbers(length);
@@ -121,7 +121,7 @@ public final class UserInterface {
         };
 
         copyToClipboard(password);
-        return password;
+        System.out.printf("Senha gerada:\n%s\n", password);
     }
-
 }
+
