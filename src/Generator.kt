@@ -1,13 +1,13 @@
 object Generator {
-    private const val letters = "abcçdefghijklmnopqrstuvwxyzABCÇDEFGHIJKLMNOPQRSTUVWXYZ"
-    private const val numbers = "0123456789"
-    private const val accents = "àáâãäèéêëìíîïòóôõöùúûüýÿ"
+    private const val LETTERS = "abcçdefghijklmnopqrstuvwxyzABCÇDEFGHIJKLMNOPQRSTUVWXYZ"
+    private const val NUMBERS = "0123456789"
+    private const val ACCENTS = "àáâãäèéêëìíîïòóôõöùúûüýÿ"
     private val unicodeChars = CharRange('\u0100', '\uFFFF').filter { !it.isLetterOrDigit() }
     private val specials = "!@²#%¨$&*()-_+/.\$£³¢¬?<>,;:°çÇ~^{}ª[]º'|".toCharArray()
 
-    private fun onlyLetters(): Char = letters.random()
-    private fun onlyNumbers(): Char = numbers.random()
-    private fun onlyAccents(): Char = accents.random()
+    private fun onlyLetters(): Char = LETTERS.random()
+    private fun onlyNumbers(): Char = NUMBERS.random()
+    private fun onlyAccents(): Char = ACCENTS.random()
     private fun onlyUnicodeChars(): Char = unicodeChars.random()
     private fun onlySpecials(): Char = specials.random()
 
@@ -19,9 +19,7 @@ object Generator {
 
     @JvmStatic
     fun lettersAndAccents(n: Int): String = buildString {
-        repeat(n) {
-            append(listOf(onlyLetters(), onlyAccents()).random())
-        }
+        repeat(n) { append(listOf(onlyLetters(), onlyAccents()).random()) }
     }
 
     @JvmStatic
