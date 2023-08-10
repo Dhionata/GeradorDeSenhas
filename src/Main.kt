@@ -1,3 +1,3 @@
 fun main() {
-    UserInterface.comecar()
+    UserInterface.start()
 }

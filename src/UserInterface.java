@@ -7,7 +7,7 @@ public final class UserInterface {
     private JFormattedTextField textNumber;
     private JComboBox<String> comboBox;
 
-    private UserInterface() { // Núcleo da UserInterface
+    private UserInterface() {
         textNumber.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -21,8 +21,7 @@ public final class UserInterface {
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                // Não é acionado para alterações no conteúdo do texto
-                // Nada a ser feito quando o estilo do texto é alterado
+                // Não é acionado para alterações no conteúdo do texto e sim alterações no estilo
             }
         });
 
@@ -33,7 +32,7 @@ public final class UserInterface {
                 }));
     }
 
-    public static void comecar() {
+    public static void start() {
         createUIComponents();
     }
 
@@ -46,6 +45,4 @@ public final class UserInterface {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
     }
-
 }
-

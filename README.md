@@ -1,1 +1,3 @@
-# GeradorDeSenhas é um programa básico que desenvolvi para testar alguns conhecimentos em Kotlin e Java básico.
+# GeradorDeSenhas
+
+É um programa básico que desenvolvi para testar alguns conhecimentos em Kotlin e Java básico.

@@ -41,7 +41,7 @@ object Logic {
                 throw NumberFormatException("Não passou pelo Regex!\n")
             }
             val number = textNumberText.toInt()
-            if (number > 10000000 && !isSafeToContinue()) {
+            if (number > 10000000 && isSafeToContinue()) {
                 println("O usuário optou por não prosseguir.")
                 return false
             }
@@ -65,7 +65,7 @@ object Logic {
             rootPane, message, "Atenção", JOptionPane.OK_CANCEL_OPTION,
             JOptionPane.WARNING_MESSAGE
         )
-        return option == JOptionPane.OK_OPTION
+        return option != JOptionPane.OK_OPTION
     }
 
     private fun generatePassword(length: Int) {
