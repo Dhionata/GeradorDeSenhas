@@ -79,7 +79,6 @@ object Logic {
             6 -> allMixed(length)
             else -> throw IllegalArgumentException("Invalid option selected.")
         }
-        //println("Senha gerada:\n$password\n")
         copyToClipboard(password)
     }
 }

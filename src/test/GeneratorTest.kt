@@ -30,7 +30,7 @@ class GeneratorTest {
     }
 
     @Test
-    fun lettersAndAccents() {
+    fun `letters and accents`() {
         val lettersAndAccents = Generator.lettersAndAccents(n)
         lettersAndAccents.forEach {
             if (!it.isLetter() && !lettersAndAccents.contains("^[çÇ${Generator.ACCENTS}]+$".toRegex())) {
@@ -43,7 +43,7 @@ class GeneratorTest {
     }
 
     @Test
-    fun lettersAndNumbers() {
+    fun `letters and numbers`() {
         val lettersAndNumbers = Generator.lettersAndNumbers(n)
         lettersAndNumbers.forEach {
             if (!it.isLetterOrDigit()) Exception("ins't letter or digit: $it")
@@ -52,7 +52,7 @@ class GeneratorTest {
     }
 
     @Test
-    fun letterAccentsAndNumbers() {
+    fun `letter, accents and numbers`() {
         val letterAccentsAndNumbers = Generator.letterAccentsAndNumbers(n)
         letterAccentsAndNumbers.forEach {
             if (!it.isLetterOrDigit() && letterAccentsAndNumbers.contains("^[${Generator.ACCENTS}]+$".toRegex())) {
@@ -65,7 +65,7 @@ class GeneratorTest {
     }
 
     @Test
-    fun lettersNumbersAndCaracteres() {
+    fun `letters, numbers and caracteres`() {
         val lettersNumbersAndCaracteres = Generator.lettersNumbersAndCaracteres(n)
         lettersNumbersAndCaracteres.forEach {
             if (!it.isLetterOrDigit() && lettersNumbersAndCaracteres.contains("^[${Generator.SPECIALS}]]+$".toRegex())) {
@@ -81,13 +81,16 @@ class GeneratorTest {
     fun unicoded() {
         Generator.unicodeChars.forEach {
             if (it.isLetterOrDigit() || it.toString().contains(
-                    "^[a-zA-ZçÇ0-9${Generator.SPECIALS}${Generator.ACCENTS}]]+\$".toRegex()
+                    "^[çÇ${Generator.SPECIALS}${Generator.ACCENTS}]]+\$".toRegex()
                 )
             ) {
                 Exception("It's wrong! $it")
             }
         }
+    }
 
+    @Test
+    fun `test of generated Unicode Chars`() {
         fun generateUnicodeChars(n: Int) = Generator.generateRandomString(n, listOf(Generator.unicodeChars::random))
 
         repeat(10) {

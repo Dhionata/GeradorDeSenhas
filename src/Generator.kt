@@ -3,10 +3,9 @@ object Generator {
     private const val NUMBERS = "0123456789"
     const val ACCENTS = "àáâãäèéêëìíîïòóôõöùúûüýÿÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÖÕÚÙÛÜÝ"
     const val SPECIALS = "!@²#%¨\"$&*()-_+/.\$£³¢¬?<>,;:°çÇ~^{}ª[]º'|§´`"
-    val unicodeChars = CharRange('\u0000', '\uFFFF').filter { !it.isLetterOrDigit() }
-        .filter { !SPECIALS.contains(it) }.filter {
-            !ACCENTS.contains(it)
-        }
+    val unicodeChars =
+        CharRange('\u0000', '\uFFFF').filterNot { it.isLetterOrDigit() }.filterNot { SPECIALS.contains(it) }
+            .filterNot { ACCENTS.contains(it) }
 
     @JvmStatic
     fun generateRandomString(n: Int, functions: List<() -> Char>): String = buildString {
