@@ -5,35 +5,35 @@ object Generator {
 	const val SPECIALS = "!@²#%¨\"$&*()-_+/.\$£³¢¬?<>,;:°çÇ~^{}ª[]º'|§´`"
 	val unicodeChars =
 		CharRange('\u0000', '\uFFFF').filterNot { it.isLetterOrDigit() }.filterNot { SPECIALS.contains(it) }
-			.filterNot { ACCENTS.contains(it) }
+			.filterNot { ACCENTS.contains(it) }.filterNot { it.isISOControl() }
 
 	@JvmStatic
-	fun generateRandomString(n: Int, functions: List<Char>): String = buildString {
-		repeat(n) { append(functions.random()) }
+	fun generateRandomString(n: Int, functions: List<String>): String = buildString {
+		repeat(n) { append(functions.random().random()) }
 	}
 
 	@JvmStatic
-	fun letters(n: Int): String = generateRandomString(n, listOf(LETTERS.random()))
+	fun letters(n: Int): String = generateRandomString(n, listOf(LETTERS))
 
 	@JvmStatic
-	fun numbers(n: Int): String = generateRandomString(n, listOf(NUMBERS.random()))
+	fun numbers(n: Int): String = generateRandomString(n, listOf(NUMBERS))
 
 	@JvmStatic
-	fun lettersAndAccents(n: Int): String = generateRandomString(n, listOf(LETTERS.random(), ACCENTS.random()))
+	fun lettersAndAccents(n: Int): String = generateRandomString(n, listOf(LETTERS, ACCENTS))
 
 	@JvmStatic
-	fun lettersAndNumbers(n: Int): String = generateRandomString(n, listOf(LETTERS.random(), NUMBERS.random()))
+	fun lettersAndNumbers(n: Int): String = generateRandomString(n, listOf(LETTERS, NUMBERS))
 
 	@JvmStatic
-	fun letterAccentsAndNumbers(n: Int): String =
-		generateRandomString(n, listOf(LETTERS.random(), NUMBERS.random(), ACCENTS.random()))
+	fun letterAccentsAndNumbers(n: Int): String = generateRandomString(n, listOf(LETTERS, NUMBERS, ACCENTS))
 
 	@JvmStatic
-	fun lettersNumbersAndCaracteres(n: Int): String =
-		generateRandomString(n, listOf(LETTERS.random(), NUMBERS.random(), SPECIALS.random()))
+	fun lettersNumbersAndCaracteres(n: Int): String = generateRandomString(n, listOf(LETTERS, NUMBERS, SPECIALS))
 
 	@JvmStatic
 	fun allMixed(n: Int): String = generateRandomString(
-		n, listOf(LETTERS.random(), NUMBERS.random(), ACCENTS.random(), SPECIALS.random(), unicodeChars.random())
+		n, listOf(
+			LETTERS, NUMBERS, ACCENTS, SPECIALS, unicodeChars.joinToString("")
+		)
 	)
 }
