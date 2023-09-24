@@ -1,6 +1,7 @@
 package test
 
 import Generator
+import Generator.allMixed
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -58,7 +59,6 @@ class GeneratorTest {
 
 	@Test
 	fun `test of generated Unicode Chars`() {
-
 		repeat(10) {
 			val passwordUnicode = Generator.generateRandomString(n, listOf(Generator.unicodeChars.joinToString("")))
 			val any = passwordUnicode.any {
@@ -69,4 +69,11 @@ class GeneratorTest {
 		}
 	}
 
+	@Test
+	fun `numbers of any caracter`() {
+		val allMixed = allMixed(n).groupingBy { it }.eachCount().toList().sortedBy { (_, value) -> value }.toMap()
+		allMixed.forEach { (chave, valor) ->
+			println("O caractere '$chave' se repete $valor vezes")
+		}
+	}
 }

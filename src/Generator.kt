@@ -9,7 +9,8 @@ object Generator {
 
 	@JvmStatic
 	fun generateRandomString(n: Int, functions: List<String>): String = buildString {
-		repeat(n) { append(functions.random().random()) }
+		val allCaracters = functions.joinToString("")
+		repeat(n) { append(allCaracters.random()) }
 	}
 
 	@JvmStatic
