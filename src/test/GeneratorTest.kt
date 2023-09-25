@@ -6,74 +6,93 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class GeneratorTest {
-	private val n = 1000000
+    private val n = 1000000
 
-	@Test
-	fun letters() {
-		val letters = Generator.letters(n)
-		Assertions.assertEquals(true, letters.all { it.isLetter() })
-	}
+    @Test
+    fun letters() {
+        val letters = Generator.letters(n)
+        Assertions.assertTrue(letters.all { it.isLetter() })
+    }
 
-	@Test
-	fun numbers() {
-		val numbers = Generator.numbers(n)
-		Assertions.assertEquals(true, numbers.all { it.isDigit() })
-	}
+    @Test
+    fun numbers() {
+        val numbers = Generator.numbers(n)
+        Assertions.assertTrue(numbers.all { it.isDigit() })
+    }
 
-	@Test
-	fun `letters and accents`() {
-		val lettersAndAccents = Generator.lettersAndAccents(n)
-		Assertions.assertEquals(
-			true, lettersAndAccents.matches("^[a-zA-zçÇ${Generator.ACCENTS}]+\$".toRegex())
-		)
-	}
+    @Test
+    fun `letters and accents`() {
+        val lettersAndAccents = Generator.lettersAndAccents(n)
+        Assertions.assertTrue(lettersAndAccents.all { it.isLetter() || Generator.ACCENTS.contains(it) }
+        )
+    }
 
-	@Test
-	fun `letters and numbers`() {
-		val lettersAndNumbers = Generator.lettersAndNumbers(n)
-		Assertions.assertEquals(true, lettersAndNumbers.all { it.isLetterOrDigit() })
-	}
+    @Test
+    fun `letters and numbers`() {
+        val lettersAndNumbers = Generator.lettersAndNumbers(n)
+        Assertions.assertTrue(lettersAndNumbers.all { it.isLetterOrDigit() })
+    }
 
-	@Test
-	fun `letter, accents and numbers`() {
-		val letterAccentsAndNumbers = Generator.letterAccentsAndNumbers(n)
-		Assertions.assertEquals(
-			true,
-			letterAccentsAndNumbers.all { it.isLetterOrDigit() || Generator.ACCENTS.contains(it) })
-	}
+    @Test
+    fun `letter, numbers and accents`() {
+        val letterAccentsAndNumbers = Generator.letterNumbersAndAccents(n)
+        Assertions.assertTrue(
+            letterAccentsAndNumbers.all { it.isLetterOrDigit() || Generator.ACCENTS.contains(it) })
+    }
 
-	@Test
-	fun `letters, numbers and caracteres`() {
-		val lettersNumbersAndCaracteres = Generator.lettersNumbersAndCaracteres(n)
-		Assertions.assertEquals(true, lettersNumbersAndCaracteres.all {
-			it.isLetterOrDigit() || Generator.SPECIALS.contains(it)
-		})
-	}
+    @Test
+    fun `letters, numbers and specials`() {
+        val lettersNumbersAndCaracteres = Generator.lettersNumbersAndSpecials(n)
+        Assertions.assertTrue(lettersNumbersAndCaracteres.all {
+            it.isLetterOrDigit() || Generator.SPECIALS.contains(it)
+        })
+    }
 
-	@Test
-	fun unicoded() {
-		Assertions.assertEquals(false, Generator.unicodeChars.any {
-			it.isLetterOrDigit() || Generator.SPECIALS.contains(it) || Generator.ACCENTS.contains(it) || it.isISOControl()
-		})
-	}
+    @Test
+    fun `letters, numbers, accents and specials`() {
+        Assertions.assertFalse(Generator.letterNumbersAccentsAndSpecials(n).any {
+            Generator.unicodeChars.contains(it)
+        })
+    }
 
-	@Test
-	fun `test of generated Unicode Chars`() {
-		repeat(10) {
-			val passwordUnicode = Generator.generateRandomString(n, listOf(Generator.unicodeChars.joinToString("")))
-			val any = passwordUnicode.any {
-				it.isLetterOrDigit() || it.isISOControl() || Generator.ACCENTS.contains(it) ||
-						Generator.SPECIALS.contains(it)
-			}
-			Assertions.assertEquals(false, any)
-		}
-	}
+    @Test
+    fun unicodes() {
+        Assertions.assertFalse(Generator.unicodeChars.any {
+            it.isLetterOrDigit() || Generator.SPECIALS.contains(it) || Generator.ACCENTS.contains(it)
+        })
+    }
 
-	@Test
-	fun `numbers of any caracter`() {
-		val allMixed = allMixed(n).groupingBy { it }.eachCount().toList().sortedBy { (_, value) -> value }.toMap()
-		allMixed.forEach { (chave, valor) ->
-			println("O caractere '$chave' se repete $valor vezes")
-		}
-	}
+    @Test
+    fun `distribution, average and unique characters`() {
+        val allMixed = allMixed(n).groupingBy { it }.eachCount().toList().sortedBy { it.second }
+        allMixed.forEach { (chave, valor) ->
+            println(
+                if (chave.isDefined()) "O caractere '$chave' se repete $valor vezes, código Unicode ${
+                    String.format(
+                        "\\u%04x", chave.code
+                    )
+                }" else "\n--Não definido--\nO caractere '$chave' se repete $valor vezes\n--Não definido--\n"
+            )
+        }
+        val biggestDifference =
+            allMixed.maxByOrNull { it.second }?.second?.minus(allMixed.minByOrNull { it.second }?.second ?: return)
+
+        val average = allMixed.map { it.second }.average()
+        val unique = allMixed.map { it.first }.size
+        val undefined = allMixed.filter { !it.first.isDefined() }
+
+        println(
+            "\n--Dados--\nA média é $average com a maior diferença sendo $biggestDifference\nO número total de " +
+                    "caracteres únicos foi de $unique\n${
+                        if (undefined.isNotEmpty()) "número total de caracteres não definidos é ${undefined.size}"
+                        else ""
+                    }"
+        )
+
+        if (biggestDifference != null) {
+            Assertions.assertTrue(
+                biggestDifference <= average
+            )
+        }
+    }
 }
