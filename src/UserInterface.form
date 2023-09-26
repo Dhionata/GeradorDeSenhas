@@ -38,8 +38,9 @@
             <item value="Letras e Acentos"/>
             <item value="Letras e Números"/>
             <item value="Letras, Números e Acentos"/>
-            <item value="Letras, Números e Caracteres"/>
-            <item value="Letras, Números, Acentos, Caracteres e Especiais"/>
+            <item value="Letras, Números e Especiais"/>
+            <item value="Letras, Números, Acentos e Especiais"/>
+            <item value="Letras, Números, Acentos, Especiais e Unicodes"/>
           </model>
         </properties>
       </component>
