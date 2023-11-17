@@ -1,19 +1,21 @@
 object Generator {
-    internal val letters = (('a'..'z') + ('A'..'Z')).joinToString("")
-    internal val numbers = (0..9).joinToString("")
-    internal const val ACCENTS = "àáâãäèéêëìíîïòóôõöùúûüýÿÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÖÕÚÙÛÜÝ"
-    internal const val SPECIALS = "!@²#%¨\"&*()-_+/.\$£³¢¬?<>,;:°çÇ~^{}ª[]º'|§´`\\"
+    internal val letters = (('a'..'z') + ('A'..'Z'))
+    internal val numbers = ('0'..'9').toList()
+    internal val accents = "àáâãäèéêëìíîïòóôõöùúûüýÿÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÖÕÚÙÛÜÝ".toList()
+    internal val specials = "!@²#%¨\"&*()-_+/.\$£³¢¬?<>,;:°çÇ~^{}ª[]º'|§´`\\".toList()
     internal val unicodeChars = CharRange(
         Char.MIN_VALUE, Char.MAX_VALUE
     ).filterNot {
-        it.isLetterOrDigit() || SPECIALS.contains(it) || ACCENTS.contains(it) || it.isWhitespace() || it.isISOControl()
+        it.isLetterOrDigit() || specials.contains(it) || accents.contains(it) || it.isWhitespace() || it.isISOControl()
                 || !it.isDefined() || it.isIdentifierIgnorable() || it.isSurrogate()
-    }.joinToString("")
+    }.toList()
 
     @JvmStatic
-    fun generateRandomString(n: Int, functions: List<String>): String = buildString {
-        val allCharacters = functions.joinToString("")
-        repeat(n) { append(allCharacters.random()) }
+    fun generateRandomString(n: Int, functions: List<List<Char>>): String {
+        val allCharacters = functions.flatten()
+        return buildString {
+            repeat(n) { append(allCharacters.random()) }
+        }
     }
 
     @JvmStatic
@@ -23,19 +25,19 @@ object Generator {
     fun numbers(n: Int) = generateRandomString(n, listOf(numbers))
 
     @JvmStatic
-    fun lettersAndAccents(n: Int) = generateRandomString(n, listOf(letters, ACCENTS))
+    fun lettersAndAccents(n: Int) = generateRandomString(n, listOf(letters, accents))
 
     @JvmStatic
     fun lettersAndNumbers(n: Int) = generateRandomString(n, listOf(letters, numbers))
 
     @JvmStatic
-    fun letterNumbersAndAccents(n: Int) = generateRandomString(n, listOf(letters, numbers, ACCENTS))
+    fun letterNumbersAndAccents(n: Int) = generateRandomString(n, listOf(letters, numbers, accents))
 
     @JvmStatic
-    fun lettersNumbersAndSpecials(n: Int) = generateRandomString(n, listOf(letters, numbers, SPECIALS))
+    fun lettersNumbersAndSpecials(n: Int) = generateRandomString(n, listOf(letters, numbers, specials))
 
-    fun letterNumbersAccentsAndSpecials(n: Int) = generateRandomString(n, listOf(letters, numbers, ACCENTS, SPECIALS))
+    fun letterNumbersAccentsAndSpecials(n: Int) = generateRandomString(n, listOf(letters, numbers, accents, specials))
 
     @JvmStatic
-    fun allMixed(n: Int) = generateRandomString(n, listOf(letters, numbers, ACCENTS, SPECIALS, unicodeChars))
+    fun allMixed(n: Int) = generateRandomString(n, listOf(letters, numbers, accents, specials, unicodeChars))
 }
