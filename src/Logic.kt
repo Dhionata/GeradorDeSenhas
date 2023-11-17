@@ -42,31 +42,32 @@ object Logic {
             System.err.println("O valor $textNumberText não passou pelo Regex!")
             return false
         }
+        val number: Int
 
-        val number = textNumberText.toInt()
+        try {
+            number = textNumberText.toInt()
+        } catch (numberException: NumberFormatException) {
+            System.err.println("numberException:\n$numberException")
+            return false
+        }
 
-        if (number > 10000000 && isSafeToContinue()) {
-            System.err.println("O usuário optou por não prosseguir.")
+        if (number >= 1000000) {
+            JOptionPane.showMessageDialog(
+                rootPane, "Deve-se ter um valor menor que 1.000.000", "Então…", JOptionPane.WARNING_MESSAGE
+            )
+            System.err.println("Deve-se ter um valor menor que 1.000.000")
             return false
         }
 
         if (number <= 0) {
             JOptionPane.showMessageDialog(
-                rootPane, "Deve-se ter um valor maior que 0.", "Então…", JOptionPane.INFORMATION_MESSAGE
+                rootPane, "Deve-se ter um valor maior que 0.", "Então…", JOptionPane.WARNING_MESSAGE
             )
-            System.err.println("O valor deve ser maior que 0.")
+            System.err.println("Deve-se ter um valor maior que 0.")
             return false
         }
 
         return true
-    }
-
-    private fun isSafeToContinue(): Boolean {
-        val message = "O valor digitado é muito grande e pode causar problemas de memória. Deseja continuar?"
-        val option = JOptionPane.showConfirmDialog(
-            rootPane, message, "Atenção", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE
-        )
-        return option != JOptionPane.OK_OPTION
     }
 
     private fun generatePassword(length: Int) {
