@@ -1,9 +1,9 @@
 package test
 
 import Generator
-import Generator.ACCENTS
-import Generator.SPECIALS
+import Generator.accents
 import Generator.allMixed
+import Generator.specials
 import Generator.unicodeChars
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.RepeatedTest
@@ -27,7 +27,7 @@ class GeneratorTest {
     @Test
     fun `letters and accents`() {
         val lettersAndAccents = Generator.lettersAndAccents(n)
-        Assertions.assertTrue(lettersAndAccents.all { it.isLetter() || ACCENTS.contains(it) })
+        Assertions.assertTrue(lettersAndAccents.all { it.isLetter() || accents.contains(it) })
     }
 
     @Test
@@ -39,14 +39,14 @@ class GeneratorTest {
     @Test
     fun `letter, numbers and accents`() {
         val letterAccentsAndNumbers = Generator.letterNumbersAndAccents(n)
-        Assertions.assertTrue(letterAccentsAndNumbers.all { it.isLetterOrDigit() || ACCENTS.contains(it) })
+        Assertions.assertTrue(letterAccentsAndNumbers.all { it.isLetterOrDigit() || accents.contains(it) })
     }
 
     @Test
     fun `letters, numbers and specials`() {
         val lettersNumbersAndCaracteres = Generator.lettersNumbersAndSpecials(n)
         Assertions.assertTrue(lettersNumbersAndCaracteres.all {
-            it.isLetterOrDigit() || SPECIALS.contains(it)
+            it.isLetterOrDigit() || specials.contains(it)
         })
     }
 
@@ -60,7 +60,7 @@ class GeneratorTest {
     @Test
     fun unicodes() {
         Assertions.assertFalse(unicodeChars.any {
-            it.isLetterOrDigit() || SPECIALS.contains(it) || ACCENTS.contains(it)
+            it.isLetterOrDigit() || specials.contains(it) || accents.contains(it)
         })
     }
 
@@ -68,22 +68,22 @@ class GeneratorTest {
     fun `distribution, average and unique characters`() {
         val allMixed = allMixed(n).groupingBy { it }.eachCount().toList().sortedBy { it.second }
 
-        allMixed.forEach { (chave, valor) ->
+        allMixed.forEach { (caractere, quantidade) ->
             println(
-                if (chave.isDefined()) "O caractere '$chave' se repete $valor vezes, código Unicode ${
+                if (caractere.isDefined()) "O caractere '$caractere' se repete $quantidade vezes, código Unicode ${
                     String.format(
-                        "\\u%04x", chave.code
+                        "\\u%04x", caractere.code
                     )
-                }" else "\n--Não definido--\nO caractere '$chave' se repete $valor vezes, código Unicode ${
+                }" else "\n--Não definido--\nO caractere '$caractere' se repete $quantidade vezes, código Unicode ${
                     String.format(
-                        "\\u%04x", chave.code
+                        "\\u%04x", caractere.code
                     )
                 }\n"
             )
         }
 
         val biggestDifference =
-            allMixed.maxByOrNull { it.second }?.second?.minus(allMixed.minByOrNull { it.second }?.second ?: return)
+            allMixed.maxBy { it.second }.second.minus(allMixed.minBy { it.second }.second)
 
         val average = allMixed.map { it.second }.average()
         val unique = allMixed.map { it.first }.size
@@ -97,10 +97,8 @@ class GeneratorTest {
                     }\nNúmero total de caracteres: ${allMixed.sumOf { it.second }}"
         )
 
-        if (biggestDifference != null) {
-            Assertions.assertTrue(
-                biggestDifference <= average
-            )
-        }
+        Assertions.assertTrue(
+            biggestDifference <= average
+        )
     }
 }
