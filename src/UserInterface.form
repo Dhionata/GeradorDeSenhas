@@ -25,6 +25,7 @@
         </constraints>
         <properties>
           <text value=""/>
+          <toolTipText value="Quantidade de caracteres"/>
         </properties>
       </component>
       <component id="ee1d7" class="javax.swing.JComboBox" binding="comboBox" default-binding="true">
