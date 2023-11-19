@@ -69,17 +69,9 @@ class GeneratorTest {
         val allMixed = allMixed(n).groupingBy { it }.eachCount().toList().sortedBy { it.second }
 
         allMixed.forEach { (caractere, quantidade) ->
-            println(
-                if (caractere.isDefined()) "O caractere '$caractere' se repete $quantidade vezes, código Unicode ${
-                    String.format(
-                        "\\u%04x", caractere.code
-                    )
-                }" else "\n--Não definido--\nO caractere '$caractere' se repete $quantidade vezes, código Unicode ${
-                    String.format(
-                        "\\u%04x", caractere.code
-                    )
-                }\n"
-            )
+            val unicode = String.format("\\u%04x", caractere.code)
+            val prefixo = if (caractere.isDefined()) "" else "\n--Não definido--\n"
+            println("$prefixo O caractere '$caractere' se repete $quantidade vezes, código Unicode $unicode\n")
         }
 
         val biggestDifference =
