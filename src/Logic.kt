@@ -42,26 +42,24 @@ object Logic {
             System.err.println("O valor $textNumberText não passou pelo Regex!")
             return false
         }
-        val number: Int
 
-        try {
-            number = textNumberText.toInt()
-        } catch (numberException: NumberFormatException) {
-            System.err.println("numberException:\n$numberException")
-            return false
-        }
+        val number: Int = textNumberText.toInt()
 
-        if (number >= 1000000) {
+        if (number > 1000000) {
             JOptionPane.showMessageDialog(
-                rootPane, "Deve-se ter um valor menor que 1.000.000", "Então…", JOptionPane.WARNING_MESSAGE
+                rootPane, "Deve-se ter um valor menor que 1.000.000\n" +
+                        "Vai escrever um livro aleatório?", "Então…", JOptionPane.WARNING_MESSAGE
             )
-            System.err.println("Deve-se ter um valor menor que 1.000.000")
+            System.err.println("Deve-se ter um valor menor que 1.000.000\nVai escrever um livro aleatório?")
             return false
         }
 
         if (number <= 0) {
             JOptionPane.showMessageDialog(
-                rootPane, "Deve-se ter um valor maior que 0.", "Então…", JOptionPane.WARNING_MESSAGE
+                rootPane,
+                "Deve-se ter um valor maior que 0.",
+                "Então…",
+                JOptionPane.WARNING_MESSAGE
             )
             System.err.println("Deve-se ter um valor maior que 0.")
             return false
@@ -71,17 +69,18 @@ object Logic {
     }
 
     private fun generatePassword(length: Int) {
-        val password = when (comboBox.getSelectedIndex()) {
-            0 -> letters(length)
-            1 -> numbers(length)
-            2 -> lettersAndAccents(length)
-            3 -> lettersAndNumbers(length)
-            4 -> letterNumbersAndAccents(length)
-            5 -> lettersNumbersAndSpecials(length)
-            6 -> letterNumbersAccentsAndSpecials(length)
-            7 -> allMixed(length)
-            else -> throw IllegalArgumentException("Opção inválida.")
-        }
-        copyToClipboard(password)
+        copyToClipboard(
+            when (comboBox.getSelectedIndex()) {
+                0 -> letters(length)
+                1 -> numbers(length)
+                2 -> lettersAndAccents(length)
+                3 -> lettersAndNumbers(length)
+                4 -> letterNumbersAndAccents(length)
+                5 -> lettersNumbersAndSpecials(length)
+                6 -> letterNumbersAccentsAndSpecials(length)
+                7 -> allMixed(length)
+                else -> throw IllegalArgumentException("Opção inválida.")
+            }
+        )
     }
 }
