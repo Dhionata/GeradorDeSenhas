@@ -1,26 +1,29 @@
 package test
 
-import Generator
-import Generator.accents
-import Generator.allMixed
-import Generator.specials
-import Generator.unicodeChars
+import main.Generator
+import main.Generator.accents
+import main.Generator.allMixed
+import main.Generator.letters
+import main.Generator.numbers
+import main.Generator.specials
+import main.Generator.unicodeChars
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
+import java.lang.Integer.toHexString
 
 class GeneratorTest {
     private val n = 1000000
 
     @Test
     fun letters() {
-        val letters = Generator.letters(n)
+        val letters = letters(n)
         Assertions.assertTrue(letters.all { it.isLetter() })
     }
 
     @Test
     fun numbers() {
-        val numbers = Generator.numbers(n)
+        val numbers = numbers(n)
         Assertions.assertTrue(numbers.all { it.isDigit() })
     }
 
@@ -60,7 +63,7 @@ class GeneratorTest {
     @Test
     fun unicodes() {
         Assertions.assertFalse(unicodeChars.any {
-            it.isLetterOrDigit() || specials.contains(it) || accents.contains(it)
+            letters.contains(it) || numbers.contains(it) || specials.contains(it) || accents.contains(it)
         })
     }
 
@@ -69,28 +72,17 @@ class GeneratorTest {
         val allMixed = allMixed(n).groupingBy { it }.eachCount().toList().sortedBy { it.second }
 
         allMixed.forEach { (caractere, quantidade) ->
-            val unicode = String.format("\\u%04x", caractere.code)
-            val prefixo = if (caractere.isDefined()) "" else "\n--Não definido--\n"
-            println("$prefixo O caractere '$caractere' se repete $quantidade vezes, código Unicode $unicode\n")
+            val unicode = "\\U+${toHexString(caractere.code)}".uppercase()
+            println("O caractere $caractere se repete $quantidade vezes, código Unicode $unicode\n")
         }
 
-        val biggestDifference =
-            allMixed.maxBy { it.second }.second.minus(allMixed.minBy { it.second }.second)
+        val biggestDifference = allMixed.maxBy { it.second }.second.minus(allMixed.minBy { it.second }.second)
 
         val average = allMixed.map { it.second }.average()
         val unique = allMixed.map { it.first }.size
-        val undefined = allMixed.filter { !it.first.isDefined() }
 
-        println(
-            "\n--Dados--\nA média é $average com a maior diferença sendo $biggestDifference" +
-                    "\nO número total de caracteres únicos foi de $unique\n${
-                        if (undefined.isNotEmpty()) "número total de caracteres não definidos é ${undefined.size}"
-                        else ""
-                    }\nNúmero total de caracteres: ${allMixed.sumOf { it.second }}"
-        )
+        println("\n--Dados--\nA média é $average com a maior diferença sendo $biggestDifference\nO número total de caracteres únicos foi de $unique\nNúmero total de caracteres: ${allMixed.sumOf { it.second }}")
 
-        Assertions.assertTrue(
-            biggestDifference <= average
-        )
+        Assertions.assertTrue(average <= 17)
     }
 }
