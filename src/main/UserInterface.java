@@ -13,12 +13,12 @@ public class UserInterface {
         textNumber.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                Logic.INSTANCE.init(rootPane, textNumber, comboBox);
+                new Logic().init(rootPane, textNumber, comboBox);
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                Logic.INSTANCE.init(rootPane, textNumber, comboBox);
+                new Logic().init(rootPane, textNumber, comboBox);
             }
 
             @Override
