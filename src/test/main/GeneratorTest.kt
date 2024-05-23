@@ -1,6 +1,5 @@
-package test
+package main
 
-import main.Generator
 import main.Generator.accents
 import main.Generator.allMixed
 import main.Generator.letters
@@ -11,6 +10,8 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import java.lang.Integer.toHexString
+import java.util.logging.Level.INFO
+import java.util.logging.Logger
 
 class GeneratorTest {
     private val n = 1000000
@@ -61,7 +62,7 @@ class GeneratorTest {
     }
 
     @Test
-    fun unicodes() {
+    fun `uni-codes`() {
         Assertions.assertFalse(unicodeChars.any {
             letters.contains(it) || numbers.contains(it) || specials.contains(it) || accents.contains(it)
         })
@@ -70,18 +71,23 @@ class GeneratorTest {
     @RepeatedTest(5)
     fun `distribution, average and unique characters`() {
         val allMixed = allMixed(n).groupingBy { it }.eachCount().toList().sortedBy { it.second }
+        val logger = Logger.getLogger(this.javaClass.name)
 
         allMixed.forEach { (caractere, quantidade) ->
             val unicode = "\\U+${toHexString(caractere.code)}".uppercase()
-            println("O caractere $caractere se repete $quantidade vezes, código Unicode $unicode\n")
+            logger.log(INFO, "O caractere $caractere se repete $quantidade vezes, código Unicode $unicode\n")
         }
 
         val biggestDifference = allMixed.maxBy { it.second }.second.minus(allMixed.minBy { it.second }.second)
 
         val average = allMixed.map { it.second }.average()
-        val unique = allMixed.map { it.first }.size
+        val unique = allMixed.size
 
-        println("\n--Dados--\nA média é $average com a maior diferença sendo $biggestDifference\nO número total de caracteres únicos foi de $unique\nNúmero total de caracteres: ${allMixed.sumOf { it.second }}")
+        logger.log(
+            INFO,
+            "A média é $average com a maior diferença sendo $biggestDifference\nO número total de " +
+                    "caracteres únicos foi de $unique\nNúmero total de caracteres: ${allMixed.sumOf { it.second }}"
+        )
 
         Assertions.assertTrue(average <= 17)
     }
