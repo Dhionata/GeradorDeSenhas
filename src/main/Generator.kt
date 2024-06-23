@@ -7,8 +7,7 @@ object Generator {
     internal val specials = "!@²#%¨\"&*()-_+/.\$£³¢¬?<>,;:°çÇ~^{}ª[]º'|§´`\\".toList()
     internal val unicodeChars = CharRange(Char.MIN_VALUE, Char.MAX_VALUE).filterNot {
         val original = it.toString()
-        val bytes = original.toByteArray(Charsets.UTF_8)
-        val decoded = bytes.toString(Charsets.UTF_8)
+        val decoded = original.toByteArray(Charsets.UTF_8).toString(Charsets.UTF_8)
         letters.contains(it) || numbers.contains(it) || specials.contains(it) || accents.contains(it) || it.isISOControl() || original != decoded || it.isWhitespace() || !it.isDefined() || it.isIdentifierIgnorable()
     }.toList()
 
@@ -38,7 +37,8 @@ object Generator {
     @JvmStatic
     fun lettersNumbersAndSpecials(n: Int): String = generateRandomString(n, listOf(letters, numbers, specials))
 
-    fun letterNumbersAccentsAndSpecials(n: Int): String = generateRandomString(n, listOf(letters, numbers, accents, specials))
+    fun letterNumbersAccentsAndSpecials(n: Int): String =
+        generateRandomString(n, listOf(letters, numbers, accents, specials))
 
     @JvmStatic
     fun allMixed(n: Int): String = generateRandomString(n, listOf(letters, numbers, accents, specials, unicodeChars))
