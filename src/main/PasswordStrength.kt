@@ -1,43 +1,60 @@
 package main
 
 import java.math.BigInteger
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 
 class PasswordStrength {
-    fun estimatePasswordStrength(password: String): String {
+
+    fun estimate(password: String, type: PasswordType): String {
+        if (password.isEmpty()) return "0"
+
+        // Agora usamos o tamanho real da lista definida no Generator
+        val poolSize = type.getPoolSize()
         val length = password.length
-        val uniqueChars = password.toSet().size
 
-        // Calcula o espaço de busca usando BigInteger
-        val totalCombinations = BigInteger.valueOf(uniqueChars.toLong()).pow(length)
+        val combinations = BigInteger.valueOf(poolSize.toLong()).pow(length)
 
-        // Assume uma taxa de tentativas por segundo
-        val attemptsPerSecond = BigInteger.valueOf(10_000_000_000) // 1 bilhão de tentativas por segundo
+        // 100 Bilhões de tentativas/seg
+        val attemptsPerSecond = BigInteger("100000000000")
+        val secondsToCrack = combinations.divide(attemptsPerSecond)
 
-        // Calcula o tempo em segundos
-        val secondsToCrack = totalCombinations.divide(attemptsPerSecond)
-
-        // Convertendo o tempo em uma forma mais legível
-        val timeToCrack = formatTime(secondsToCrack)
-
-        return timeToCrack
+        return formatTime(secondsToCrack)
     }
 
     private fun formatTime(seconds: BigInteger): String {
-        val secondsInMinute = BigInteger.valueOf(60)
-        val secondsInHour = secondsInMinute.multiply(BigInteger.valueOf(60))
-        val secondsInDay = secondsInHour.multiply(BigInteger.valueOf(24))
-        val secondsInYear = secondsInDay.multiply(BigInteger.valueOf(365))
-        val secondsInCentury = secondsInYear.multiply(BigInteger.valueOf(100))
-        val secondsInMillennium = secondsInYear.multiply(BigInteger.valueOf(1000))
+        val minute = BigInteger.valueOf(60)
+        val hour = minute * BigInteger.valueOf(60)
+        val day = hour * BigInteger.valueOf(24)
+        val year = day * BigInteger.valueOf(365)
 
         return when {
-            seconds < secondsInMinute -> "$seconds segundos"
-            seconds < secondsInHour -> "${seconds.divide(secondsInMinute)} minutos"
-            seconds < secondsInDay -> "${seconds.divide(secondsInHour)} horas"
-            seconds < secondsInYear -> "${seconds.divide(secondsInDay)} dias"
-            seconds < secondsInCentury -> "${seconds.divide(secondsInYear)} anos"
-            seconds < secondsInMillennium -> "${seconds.divide(secondsInCentury)} séculos"
-            else -> "${seconds.divide(secondsInMillennium)} milênios"
+            seconds < BigInteger.ONE -> "Instantâneo"
+            seconds < minute -> "$seconds segundos"
+            seconds < hour -> "${seconds / minute} minutos"
+            seconds < day -> "${seconds / hour} horas"
+            seconds < year -> "${seconds / day} dias"
+            else -> {
+                val years = seconds / year
+                if (years < BigInteger.valueOf(1_000_000_000)) {
+                    "${formatNumber(years)} anos"
+                } else {
+                    formatScientific(years) + " anos"
+                }
+            }
         }
+    }
+
+    private fun formatNumber(number: BigInteger): String {
+        val localeBR = Locale.forLanguageTag("pt-BR")
+        val symbols = DecimalFormatSymbols(localeBR)
+        symbols.groupingSeparator = '.'
+        return DecimalFormat("#,###", symbols).format(number)
+    }
+
+    private fun formatScientific(number: BigInteger): String {
+        val s = number.toString()
+        return "${s[0]}.${s.substring(1, 4)}e+${s.length - 1}"
     }
 }
